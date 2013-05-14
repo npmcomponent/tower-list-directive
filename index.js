@@ -4,20 +4,23 @@
  */
 
 var directive = require('tower-directive')
-  , scopes = require('tower-scope');
+  , scope = require('tower-scope')
+  , template = require('tower-template');
 
 /**
- * Expose `data-each` directive.
+ * Expose `data-list` directive.
  */
 
-module.exports = eachDirective;
+module.exports = list;
 
-// XXX: starting to refactor this out.
+/**
+ * List directive.
+ */
 
-function eachDirective(scope, element, attr) {
+function list(_scope, element, attr) {
   var self = this;
   var val = attr.value.split(/ +/);
-  element.removeAttribute('data-each');
+  element.removeAttribute(attr.name);
 
   if (val.length > 1) {
     var name = val[0];
@@ -27,16 +30,16 @@ function eachDirective(scope, element, attr) {
   }
 
   // e.g. todos
-  var array = scope.get(prop);
+  var array = _scope.get(prop);
   var fn = template(element);
   var parent = element.parentNode;
   parent.removeChild(element);
   var lastIndex = array.length ? array.length - 1 : 0;
 
-  scope.on('change ' + prop, function(array){
+  _scope.on('change ' + prop, function(array){
     for (var i = lastIndex, n = array.length; i < n; i++) {
-      var childScope = scopes(name).init({
-          parent: scope
+      var childScope = scope(name).init({
+          parent: _scope
         , todo: array[i].attrs
         , i: i
       });

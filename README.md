@@ -1,16 +1,16 @@
-# Tower Each Directive
+# Tower List Directive
 
 ## Installation
 
 ```bash
-$ component install tower/each-directive
+$ component install tower/list-directive
 ```
 
 ## Example
 
 ```js
-var eachDirective = require('tower-each-directive');
-eachDirective.exec(document.querySelector('#todos'));
+var list = require('tower-list-directive');
+list.exec(document.querySelector('#todos'));
 ```
 
 ## Licence
