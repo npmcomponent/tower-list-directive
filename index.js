@@ -19,7 +19,6 @@ module.exports = directive('data-list', list);
  */
 
 function list(_scope, element, attr) {
-  var self = this;
   var val = attr.value.split(/ +/);
   element.removeAttribute(attr.name);
 
@@ -29,6 +28,9 @@ function list(_scope, element, attr) {
   } else {
     var prop = val[0];
   }
+
+  // recycled DOM elements by data item `id`
+  var elements = {};
 
   // e.g. todos
   var array = _scope.get(prop);

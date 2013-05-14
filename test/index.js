@@ -1,4 +1,5 @@
 var list = require('tower-each-directive')
+  , $ = require('component-dom')
   , assert = require('component-assert');
 
 describe('list', function(){
@@ -8,8 +9,10 @@ describe('list', function(){
       , { title: 'bar' }
       , { title: 'baz' }
     ];
-    var element = document.querySelector('#iterator');
+    var element = document.querySelector('#list li');
+    assert(1 === document.querySelectorAll('#list li').length);
     list.exec(element, { items: items });
-    console.log(element)
+    assert(3 === document.querySelectorAll('#list li').length);
+    assert(null === element.getAttribute('data-list'));
   });
 });
