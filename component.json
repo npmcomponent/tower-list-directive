@@ -5,13 +5,17 @@
   "version": "0.0.1",
   "keywords": [],
   "dependencies": {
+    "tower/directive": "*",
     "tower/scope": "*",
-    "tower/directive": "*"
+    "tower/template": "*",
+    "component/dom": "*"
   },
   "development": {
     "component/assert": "*",
     "visionmedia/mocha": "*"
   },
-  "scripts": ["index.js"],
+  "scripts": [
+    "index.js"
+  ],
   "license": "MIT"
 }

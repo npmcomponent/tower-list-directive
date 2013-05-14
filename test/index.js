@@ -1,8 +1,15 @@
-var eachDirective = require('tower-each-directive')
+var list = require('tower-each-directive')
   , assert = require('component-assert');
 
-describe('eachDirective', function(){
+describe('list', function(){
   it('should test', function(){
-    
+    var items = [
+        { title: 'foo' }
+      , { title: 'bar' }
+      , { title: 'baz' }
+    ];
+    var element = document.querySelector('#iterator');
+    list.exec(element, { items: items });
+    console.log(element)
   });
 });

@@ -5,13 +5,14 @@
 
 var directive = require('tower-directive')
   , scope = require('tower-scope')
-  , template = require('tower-template');
+  , template = require('tower-template')
+  , $ = require('dom');
 
 /**
  * Expose `data-list` directive.
  */
 
-module.exports = list;
+module.exports = directive('data-list', list);
 
 /**
  * List directive.
@@ -34,9 +35,14 @@ function list(_scope, element, attr) {
   var fn = template(element);
   var parent = element.parentNode;
   parent.removeChild(element);
-  var lastIndex = array.length ? array.length - 1 : 0;
+  var lastIndex = 0;
+  change(array);
 
   _scope.on('change ' + prop, function(array){
+    change(array);
+  });
+
+  function change(array) {
     for (var i = lastIndex, n = array.length; i < n; i++) {
       var childScope = scope(name).init({
           parent: _scope
@@ -47,5 +53,5 @@ function list(_scope, element, attr) {
       $(parent).prepend(childElement);
     }
     lastIndex = n;
-  });
+  }
 }
