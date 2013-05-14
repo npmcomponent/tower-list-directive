@@ -3,7 +3,7 @@ var list = require('tower-each-directive')
   , assert = require('component-assert');
 
 describe('list', function(){
-  it('should test', function(){
+  it('should add items', function(){
     var items = [
         { title: 'foo' }
       , { title: 'bar' }
