@@ -1,0 +1,17 @@
+{
+  "name": "tower-each-directive",
+  "repo": "tower/each-directive",
+  "description": "Tower Each Directive component",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "tower/scope": "*",
+    "tower/directive": "*"
+  },
+  "development": {
+    "component/assert": "*",
+    "visionmedia/mocha": "*"
+  },
+  "scripts": ["index.js"],
+  "license": "MIT"
+}
