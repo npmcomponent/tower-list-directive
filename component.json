@@ -8,6 +8,7 @@
     "tower/directive": "*",
     "tower/scope": "*",
     "tower/template": "*",
+    "tower/collection": "*",
     "component/dom": "*"
   },
   "development": {
