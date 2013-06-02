@@ -1,0 +1,13 @@
+{
+  "name": "tower-list-directive",
+  "description": "Tower List Directive component",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "tower-directive": "*",
+    "tower-content": "*",
+    "tower-template": "*",
+    "tower-collection": "*"
+  },
+  "license": "MIT"
+}
