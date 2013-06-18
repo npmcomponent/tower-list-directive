@@ -20,18 +20,22 @@ directive('interpolation').compiler(function(el, attr){
     expressions[$1] = true;
   });
 
-  return function(scope, el, attr){
+  function exec(scope, el, attr) {
     el.nodeValue = val.replace(/\{\{([^\{\}]+)\}\}/g, function(_, $1){
       return scope.get($1);
     });
   }
+
+  return exec;
 });
 
 /**
  * Expose `data-list` directive.
  */
 
-module.exports = directive('data-list').compiler(compiler);
+exports = module.exports = directive('data-list').compiler(compiler);
+
+exports.document = 'undefined' !== typeof document && document;
 
 /**
  * Alias to `data-each` as well.
@@ -54,8 +58,9 @@ function compiler(el, attr) {
   var fn = template(el);
   var parent = el.parentNode;
   // you have to replace nodes, not remove them, to keep order.
-  var comment = document.createComment(' ' + attr.name + ':' + attr.value + ' ');
+  var comment = exports.document.createComment(' ' + attr.name + ':' + attr.value + ' ');
   el.parentNode.replaceChild(comment, el);
+  var sourceElement = el;
   
   //parent.removeChild(el);
 
@@ -74,7 +79,6 @@ function compiler(el, attr) {
 
   function list(scope, el, attr) {
     var cursor = el;
-    var parentEl = $(parent);
 
     // e.g. todos
     var array = scope.get(prop);
@@ -82,7 +86,7 @@ function compiler(el, attr) {
     if (array instanceof Collection) {
       collection = array;
       array = collection.toArray();
-    }
+    } // XXX: else if (isObject)
     var id = 0;
     var els = {};
 
@@ -118,7 +122,7 @@ function compiler(el, attr) {
         var attrs = { parent: scope, i: i };
         attrs[name] = records[i];
         var childScope = content(name || 'anonymous').init(attrs);
-        var childElement = fn.clone2();
+        var childElement = sourceElement.cloneNode(true);
         els[id] = childElement;
         cursor.parentNode.insertBefore(childElement, cursor.nextSibling);
         cursor = childElement;
