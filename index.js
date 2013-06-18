@@ -55,7 +55,7 @@ function compiler(el, attr) {
   var parent = el.parentNode;
   // you have to replace nodes, not remove them, to keep order.
   var comment = document.createComment(' ' + attr.name + ':' + attr.value + ' ');
-  $(el).replaceWith(comment);
+  el.parentNode.replaceChild(comment, el);
   
   //parent.removeChild(el);
 
@@ -120,7 +120,7 @@ function compiler(el, attr) {
         var childScope = content(name || 'anonymous').init(attrs);
         var childElement = fn.clone2();
         els[id] = childElement;
-        $(cursor).after(childElement);
+        cursor.parentNode.insertBefore(childElement, cursor.nextSibling);
         cursor = childElement;
         fn(childScope, childElement);
       }
