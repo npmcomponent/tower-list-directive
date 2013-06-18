@@ -1,15 +1,25 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Tower Each Directive</title>
+    <title>Tower List Directive</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../build/build.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
   </head>
   <body>
     <div id="tests">
       <ul id="list">
         <li id="iterator" data-list="item in items"></li>
       </ul>
+      <form id="dynamic-form">
+        <fieldset data-list="section in sections">
+          <legend>{{section.title}}</legend>
+          <div class="field" data-list="attr in section.attrs">
+            <label>{{attr.type}}</label>
+            <div data-element="elementForAttr(attr)"></div>
+          </div>
+        </fieldset>
+      </form>
     </div>
     <div id="mocha"></div>
     <script src="../build/build.js"></script>

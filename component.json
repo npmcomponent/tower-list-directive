@@ -1,15 +1,14 @@
 {
-  "name": "tower-each-directive",
-  "repo": "tower/each-directive",
-  "description": "Tower Each Directive component",
+  "name": "tower-list-directive",
+  "repo": "tower/list-directive",
+  "description": "Tower List Directive component",
   "version": "0.0.1",
   "keywords": [],
   "dependencies": {
     "tower/directive": "*",
-    "tower/scope": "*",
+    "tower/content": "*",
     "tower/template": "*",
-    "tower/collection": "*",
-    "component/dom": "*"
+    "tower/collection": "*"
   },
   "development": {
     "component/assert": "*",
