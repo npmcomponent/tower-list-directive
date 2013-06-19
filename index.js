@@ -100,7 +100,17 @@ function compiler(templateEl, attr, nodeFn) {
         // if it's already been processed, then continue.
         if (cache[id]) continue;
 
-        var attrs = { parent: scope, i: i };
+        var attrs = {
+          parent: scope,
+          index: i,
+          first: 0 === i,
+          last: (n - 1) === i
+        };
+
+        attrs.middle = !(attrs.first || attrs.last);
+        attrs.even = 0 === attrs.index % 2;
+        attrs.odd = !attrs.even;
+
         attrs[name] = records[i];
         var childScope = content(name || 'anonymous').init(attrs);
         var childEl = templateEl.cloneNode(true);
