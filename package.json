@@ -1,7 +1,7 @@
 {
   "name": "tower-list-directive",
   "description": "Tower List Directive component",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "keywords": [],
   "dependencies": {
     "tower-directive": "*",

@@ -63,6 +63,7 @@ function compiler(el, attr) {
   var sourceElement = el;
   
   //parent.removeChild(el);
+  var prev;
 
   /**
    * List directive.
@@ -82,6 +83,9 @@ function compiler(el, attr) {
 
     // e.g. todos
     var array = scope.get(prop);
+    // XXX: tmp optimization
+    if (prev && prev === array) return;
+    prev = array;
     var collection;
     if (array instanceof Collection) {
       collection = array;
