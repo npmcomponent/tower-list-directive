@@ -29,10 +29,16 @@ function compiler(templateEl, attr, nodeFn) {
   templateEl.removeAttribute(attr.name);
 
   if (val.length > 1) {
+    // user in users
     var name = val[0];
     var prop = val[2];
+    // user in users track by user.username
+    // XXX: to-refine
+    var trackBy = (val[5] || 'index').split('.').pop();
   } else {
     var prop = val[0];
+    var name = 'this';
+    var trackBy = 'index';
   }
 
   var parent = templateEl.parentNode;
@@ -67,6 +73,18 @@ function compiler(templateEl, attr, nodeFn) {
       array = collection.toArray();
     } // XXX: else if (isObject)
 
+    var getId;
+    if ('index' === trackBy) {
+      getId = function getId(record, index) {
+        return index;
+      }
+    } else {
+      getId = function getId(record, index) {
+        // XXX: tower-accessor
+        return record[trackBy];
+      }
+    }
+
     // update DOM with [possibly] new array
     change(array);
 
@@ -77,7 +95,8 @@ function compiler(templateEl, attr, nodeFn) {
       for (var i = 0, n = records.length; i < n; i++) {
         // XXX: should allow tracking by custom tracking function
         // (such as by `id`), but for now just by index.
-        var id = i;
+        var id = getId(records[i], i);
+        console.log(id)
 
         // if it's already been processed, then continue.
         if (cache[id]) continue;
