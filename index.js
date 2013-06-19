@@ -96,7 +96,6 @@ function compiler(templateEl, attr, nodeFn) {
         // XXX: should allow tracking by custom tracking function
         // (such as by `id`), but for now just by index.
         var id = getId(records[i], i);
-        console.log(id)
 
         // if it's already been processed, then continue.
         if (cache[id]) continue;
