@@ -2,7 +2,7 @@
   "name": "tower-list-directive",
   "repo": "tower/list-directive",
   "description": "Tower List Directive component",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "keywords": [],
   "dependencies": {
     "tower/directive": "*",
