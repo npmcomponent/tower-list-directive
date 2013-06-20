@@ -12,7 +12,7 @@ var Collection = require('tower-collection').Collection;
  * Expose `data-list` directive.
  */
 
-exports = module.exports = directive('data-list').compiler(compiler);
+exports = module.exports = directive('data-list').compiler(compiler).terminal();
 
 exports.document = 'undefined' !== typeof document && document;
 
@@ -20,7 +20,7 @@ exports.document = 'undefined' !== typeof document && document;
  * Alias to `data-each` as well.
  */
 
-directive('data-each').compiler(compiler);
+directive('data-each').compiler(compiler).terminal();
 
 function compiler(templateEl, attr, nodeFn) {
   // do all this stuff up front
