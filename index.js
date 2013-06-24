@@ -123,6 +123,23 @@ function compiler(templateEl, attr, nodeFn) {
       }
     }
 
+    // XXX: tmp hack
+    if ('undefined' === typeof $) {
+      var remove = function remove(id) {
+        if (cache[id]) {
+          cache[id].parentNode.removeChild(cache[id]);
+          delete cache[id];
+        }
+      }
+    } else {
+      var remove = function remove(id) {
+        if (cache[id]) {
+          $(cache[id]).remove(); 
+          delete cache[id];
+        }
+      }
+    }
+
     function watch(collection) {
       //scope.on('change ' + prop, function(array){
       collection.on('add', function(records){
@@ -131,18 +148,13 @@ function compiler(templateEl, attr, nodeFn) {
 
       collection.on('remove', function(records){
         for (var i = 0, n = records.length; i < n; i++) {
-          var attrs = records[i].attrs;
-          if (els[attrs.id]) {
-            $(els[attrs.id]).remove(); 
-            delete els[attrs.id];
-          }
+          remove(getId(records[i], i));
         }
       });
 
       collection.on('reset', function(records){
-        for (var key in els) {
-          $(els[key]).remove();
-          delete els[key];
+        for (var id in cache) {
+          remove(id);
         }
         change(records);
       }); 
