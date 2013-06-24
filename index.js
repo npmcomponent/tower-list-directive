@@ -81,7 +81,9 @@ function compiler(templateEl, attr, nodeFn) {
     } else {
       getId = function getId(record, index) {
         // XXX: tower-accessor
-        return record[trackBy];
+        return record.get
+          ? record.get(trackBy)
+          : record[trackBy];
       }
     }
 
