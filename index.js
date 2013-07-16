@@ -114,6 +114,12 @@ function compiler(templateEl, attr, nodeFn) {
         attrs.odd = !attrs.even;
 
         attrs[name] = records[i];
+        /*
+        var childScope = scope.get(name);
+        childScope = content.is(childScope)
+          ? childScope
+          : content(name || 'anonymous').init(attrs, scope);
+        */
         var childScope = content(name || 'anonymous').init(attrs);
         var childEl = templateEl.cloneNode(true);
         cache[id] = childEl;
