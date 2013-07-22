@@ -103,7 +103,6 @@ function compiler(templateEl, attr, nodeFn) {
         if (cache[id]) continue;
 
         var attrs = {
-          parent: scope,
           index: i,
           first: 0 === i,
           last: (n - 1) === i
@@ -120,7 +119,7 @@ function compiler(templateEl, attr, nodeFn) {
           ? childScope
           : content(name || 'anonymous').init(attrs, scope);
         */
-        var childScope = content(name || 'anonymous').init(attrs);
+        var childScope = content(name || 'anonymous').init(attrs, scope);
         var childEl = templateEl.cloneNode(true);
         cache[id] = childEl;
         cursor.parentNode.insertBefore(childEl, cursor.nextSibling);
