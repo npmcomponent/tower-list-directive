@@ -9,13 +9,13 @@
   <body>
     <div id="tests">
       <ul id="list">
-        <li id="iterator" data-list="item in items"></li>
+        <li id="iterator" data-each="item in items"></li>
       </ul>
       <form id="dynamic-form">
-        <fieldset data-list="section in sections">
-          <legend>{{section.title}}</legend>
-          <div class="field" data-list="attr in section.attrs">
-            <label>{{attr.type}}</label>
+        <fieldset data-each="section in sections">
+          <legend data-text="section.title"></legend>
+          <div class="field" data-each="attr in section.attrs">
+            <label data-text="attr.type"></label>
             <div data-element="elementForAttr(attr)"></div>
           </div>
         </fieldset>

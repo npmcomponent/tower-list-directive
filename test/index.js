@@ -3,6 +3,7 @@ var list = require('tower-list-directive');
 var template = require('tower-template');
 var content = require('tower-content');
 var assert = require('component-assert');
+require('tower-text-directive');
 
 describe('list', function(){
   /*it('should add items', function(){
@@ -49,6 +50,9 @@ describe('list', function(){
         }
       ]
     };
+
+    content('form')
+      .attr('sections', 'array');
 
     var scope = content('form').init(data);
     fn(scope);

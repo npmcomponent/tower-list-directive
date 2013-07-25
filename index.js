@@ -9,24 +9,23 @@ var template = require('tower-template');
 var Collection = require('tower-collection').Collection;
 
 /**
- * Expose `data-list` directive.
+ * Expose `document`.
+ *
+ * This makes it so you can set the `document` on the server,
+ * for server-side templates.
  */
-
-exports = module.exports = directive('data-list').compiler(compiler).terminal();
 
 exports.document = 'undefined' !== typeof document && document;
 
 /**
- * Alias to `data-each` as well.
+ * Define the list directive.
  */
 
-directive('data-each').compiler(compiler).terminal();
-
-function compiler(templateEl, attr, nodeFn) {
+directive('data-each', function(templateEl, exp, nodeFn){
   // do all this stuff up front
   // XXX: add hoc expression, should use tower-expression.
-  var val = attr.value.split(/ +/);
-  templateEl.removeAttribute(attr.name);
+  var val = templateEl.getAttribute('data-each').split(/ +/);
+  templateEl.removeAttribute('data-each');
 
   if (val.length > 1) {
     // user in users
@@ -43,7 +42,7 @@ function compiler(templateEl, attr, nodeFn) {
 
   var parent = templateEl.parentNode;
   // you have to replace nodes, not remove them, to keep order.
-  var comment = exports.document.createComment(' ' + attr.name + ':' + attr.value + ' ');
+  var comment = exports.document.createComment(' data-each:' + templateEl.getAttribute('data-each') + ' ');
   templateEl.parentNode.replaceChild(comment, templateEl);
   // XXX: shouldn't have to be doing this, need to figure out.
   nodeFn = template(templateEl);
@@ -61,7 +60,7 @@ function compiler(templateEl, attr, nodeFn) {
    *    (so, basically it has a sorted collection, listening for events)
    */
 
-  function list(scope, el, attr) {
+  function exec(scope, el, exp) {
     var cursor = el;
     var cache = el.cache || (el.cache = {});
 
@@ -119,6 +118,7 @@ function compiler(templateEl, attr, nodeFn) {
           ? childScope
           : content(name || 'anonymous').init(attrs, scope);
         */
+        
         var childScope = content(name || 'anonymous').init(attrs, scope);
         var childEl = templateEl.cloneNode(true);
         cache[id] = childEl;
@@ -166,5 +166,5 @@ function compiler(templateEl, attr, nodeFn) {
     }
   }
 
-  return list;
-}
+  return exec;
+}, true).terminal().expression('data-list');
