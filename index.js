@@ -24,25 +24,15 @@ exports.document = 'undefined' !== typeof document && document;
 directive('data-each', function(templateEl, exp, nodeFn){
   // do all this stuff up front
   // XXX: add hoc expression, should use tower-expression.
-  var val = templateEl.getAttribute('data-each').split(/ +/);
+  var val = templateEl.getAttribute('data-each');
   templateEl.removeAttribute('data-each');
-
-  if (val.length > 1) {
-    // user in users
-    var name = val[0];
-    var prop = val[2];
-    // user in users track by user.username
-    // XXX: to-refine
-    var trackBy = (val[5] || 'index').split('.').pop();
-  } else {
-    var prop = val[0];
-    var name = 'this';
-    var trackBy = 'index';
-  }
+  var name = exp.val;
+  
+  var trackBy = 'index';
 
   var parent = templateEl.parentNode;
   // you have to replace nodes, not remove them, to keep order.
-  var comment = exports.document.createComment(' data-each:' + templateEl.getAttribute('data-each') + ' ');
+  var comment = exports.document.createComment(' data-each:' + val + ' ');
   templateEl.parentNode.replaceChild(comment, templateEl);
   // XXX: shouldn't have to be doing this, need to figure out.
   nodeFn = template(templateEl);
@@ -65,7 +55,7 @@ directive('data-each', function(templateEl, exp, nodeFn){
     var cache = el.cache || (el.cache = {});
 
     // e.g. todos
-    var array = scope.get(prop);
+    var array = exp.col.fn(scope); // exp.col === collection (array or object)
     var collection;
     if (array instanceof Collection) {
       collection = array;
