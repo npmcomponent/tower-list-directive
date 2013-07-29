@@ -9,7 +9,7 @@
     "tower/content": "*",
     "tower/template": "*",
     "tower/text-directive": "*",
-    "tower/collection": "0.1.0",
+    "tower/collection": "0.1.0"
   },
   "development": {
     "component/assert": "*",
