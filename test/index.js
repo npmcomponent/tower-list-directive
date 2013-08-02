@@ -55,7 +55,6 @@ describe('list', function(){
       .attr('sections', 'array');
 
     var scope = content('form').init(data);
-    window.data = data;
     fn(scope);
   });
 });
