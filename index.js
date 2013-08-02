@@ -6,7 +6,7 @@
 var directive = require('tower-directive');
 var content = require('tower-content');
 var template = require('tower-template');
-var Collection = require('tower-collection').Collection;
+var observable = require('observable-array');
 
 /**
  * Expose `document`.
@@ -22,14 +22,10 @@ exports.document = 'undefined' !== typeof document && document;
  */
 
 directive('data-each', function(templateEl, exp, nodeFn){
-  // do all this stuff up front
-  // XXX: add hoc expression, should use tower-expression.
+  var name = exp.val;
   var val = templateEl.getAttribute('data-each');
   templateEl.removeAttribute('data-each');
-  var name = exp.val;
-  
   var trackBy = 'index';
-
   var parent = templateEl.parentNode;
   // you have to replace nodes, not remove them, to keep order.
   var comment = exports.document.createComment(' data-each:' + val + ' ');
@@ -55,38 +51,40 @@ directive('data-each', function(templateEl, exp, nodeFn){
     var cache = el.cache || (el.cache = {});
 
     // e.g. todos
-    var array = exp.col.fn(scope); // exp.col === collection (array or object)
-    var collection;
-    if (array instanceof Collection) {
-      collection = array;
-      array = collection.toArray();
-    } // XXX: else if (isObject)
 
-    var getId;
-    if ('index' === trackBy) {
-      getId = function getId(record, index) {
-        return index;
-      }
-    } else {
-      getId = function getId(record, index) {
-        // XXX: tower-accessor
-        return record.get
-          ? record.get(trackBy)
-          : record[trackBy];
-      }
-    }
+    var array = exp.col.fn(scope); // exp.col === collection (array or object)
 
     // update DOM with [possibly] new array
+
     change(array);
 
-    // XXX: todo
-    if (collection) watch(collection);
+    // XXX: if (exp.bindTo)
 
-    function change(records) {
-      for (var i = 0, n = records.length; i < n; i++) {
+    observable(array);
+
+    // watch for changes in array
+
+    watch(array);
+
+    // watch for changes in expression,
+    // which means the array has been reset.
+    exp.watch(scope, function(){
+      unwatch(array);
+      array = exp.fn(scope);
+      observable(array)
+      resetHandler(array);
+    });
+
+    /**
+     * When items have been added to array.
+     */
+
+    function change(arr, index) {
+      index || (index = 0);
+      for (var i = 0, n = arr.length; i < n; i++) {
         // XXX: should allow tracking by custom tracking function
         // (such as by `id`), but for now just by index.
-        var id = getId(records[i], i);
+        var id = getId(arr[i], i + index);
 
         // if it's already been processed, then continue.
         if (cache[id]) continue;
@@ -98,17 +96,10 @@ directive('data-each', function(templateEl, exp, nodeFn){
         };
 
         attrs.middle = !(attrs.first || attrs.last);
-        attrs.even = 0 === attrs.index % 2;
-        attrs.odd = !attrs.even;
+        //attrs.even = 0 === attrs.index % 2;
+        //attrs.odd = !attrs.even;
 
-        attrs[name] = records[i];
-        /*
-        var childScope = scope.get(name);
-        childScope = content.is(childScope)
-          ? childScope
-          : content(name || 'anonymous').init(attrs, scope);
-        */
-        
+        attrs[name] = arr[i];
         var childScope = content(name || 'anonymous').init(attrs, scope);
         var childEl = templateEl.cloneNode(true);
         cache[id] = childEl;
@@ -118,41 +109,69 @@ directive('data-each', function(templateEl, exp, nodeFn){
       }
     }
 
-    // XXX: tmp hack
-    if ('undefined' === typeof $) {
-      var remove = function remove(id) {
-        if (cache[id]) {
-          cache[id].parentNode.removeChild(cache[id]);
-          delete cache[id];
-        }
-      }
-    } else {
-      var remove = function remove(id) {
-        if (cache[id]) {
-          $(cache[id]).remove(); 
-          delete cache[id];
-        }
+    /**
+     * Item removed from array.
+     */
+
+    function remove(id) {
+      if (cache[id]) {
+        cache[id].parentNode.removeChild(cache[id]);
+        delete cache[id];
       }
     }
 
-    function watch(collection) {
-      //scope.on('change ' + prop, function(array){
-      collection.on('add', function(records){
-        change(records);
-      });
+    /**
+     * Observe array.
+     */
 
-      collection.on('remove', function(records){
-        for (var i = 0, n = records.length; i < n; i++) {
-          remove(getId(records[i], i));
-        }
-      });
+    function watch(arr) {
+      arr.on('add', addHandler);
+      arr.on('remove', removeHandler);
+      arr.on('reset', resetHandler); 
+    }
 
-      collection.on('reset', function(records){
-        for (var id in cache) {
-          remove(id);
-        }
-        change(records);
-      }); 
+    /**
+     * Stop observing array.
+     */
+
+    function unwatch(arr) {
+      arr.off('add', addHandler);
+      arr.off('remove', removeHandler);
+      arr.off('reset', resetHandler);
+    }
+
+    /**
+     * When items are added to array.
+     */
+
+    function addHandler(arr, index) {
+      change(arr, index);
+    }
+
+    /**
+     * When items are removed from array.
+     */
+
+    function removeHandler(arr, index) {
+      for (var i = 0, n = arr.length; i < n; i++) {
+        remove(getId(arr[i], i + index));
+      }
+    }
+
+    /**
+     * When array is reset.
+     */
+
+    function resetHandler(arr) {
+      for (var id in cache) {
+        remove(id);
+      }
+      change(arr);
+    }
+
+    // XXX: needs to handle tracking by custom properties.
+    function getId(record, index) {
+      return index;
     }
   }
 
