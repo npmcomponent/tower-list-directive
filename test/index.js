@@ -47,6 +47,20 @@ describe('list', function(){
             { type: 'string' },
             { type: 'date' }
           ]
+        },
+        {
+          title: 'Third section',
+          attrs: [
+            { type: 'boolean' },
+            { type: 'date' }
+          ]
+        },
+        {
+          title: 'Fourth section',
+          attrs: [
+            { type: 'integer' },
+            { type: 'boolean' }
+          ]
         }
       ]
     };
