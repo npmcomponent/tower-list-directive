@@ -179,6 +179,7 @@ directive('data-each', function(templateEl, exp, nodeFn){
       change(arr);
     }
 
+    // https://github.com/component/sort/blob/master/index.js
     function sortHandler() {
       var els = [];
       var parent;
