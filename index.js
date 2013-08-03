@@ -83,8 +83,11 @@ directive('data-each', function(templateEl, exp, nodeFn){
 
     function change(arr, index) {
       if (!arr) return;
-
       index || (index = 0);
+      
+      // starting place for adding.
+      cursor = cursor.parentNode.childNodes[index];
+
       for (var i = 0, n = arr.length; i < n; i++) {
         // XXX: should allow tracking by custom tracking function
         // (such as by `id`), but for now just by index.
@@ -181,26 +184,13 @@ directive('data-each', function(templateEl, exp, nodeFn){
 
     // https://github.com/component/sort/blob/master/index.js
     function sortHandler() {
-      var els = [];
-      var parent;
-
       // sort the elements
       for (var i = 0, n = array.length; i < n; i++) {
         var id = getId(array[i]);
         var childEl = cache[id];
         // XXX: handle when there's 10 items showing but 100 items in the array
-        // if (!el)
-        els.push(childEl);
-        parent = childEl.parentNode;
-        childEl.parentNode.removeChild(childEl);
-      }
-
-      // add the elements.
-      for (var i = 0, n = array.length; i < n; i++) {
-        var id = getId(array[i]);
-        var childScope = scopeCache[id];
-        parent.appendChild(els[i]);
-        nodeFn(childScope, els[i]);
+        // XXX: also, maybe optimize by detaching and adding once?
+        childEl.parentNode.appendChild(childEl);
       }
     }
 
