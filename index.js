@@ -6,6 +6,7 @@
 var directive = require('tower-directive');
 var content = require('tower-content');
 var template = require('tower-template');
+var oid = require('tower-oid');
 var observable = require('observable-array');
 
 /**
@@ -171,7 +172,7 @@ directive('data-each', function(templateEl, exp, nodeFn){
 
     // XXX: needs to handle tracking by custom properties.
     function getId(record, index) {
-      return index;
+      return oid(record) || index;
     }
   }
 

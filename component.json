@@ -8,7 +8,7 @@
     "tower/directive": "*",
     "tower/content": "*",
     "tower/template": "*",
-    "tower/text-directive": "*",
+    "tower/oid": "*",
     "viatropos/observable-array": "*"
   },
   "development": {
