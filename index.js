@@ -50,10 +50,11 @@ directive('data-each', function(templateEl, exp, nodeFn){
   function exec(scope, el, exp) {
     var cursor = el;
     var cache = el.cache || (el.cache = {});
+    var scopeCache = {};
 
     // e.g. todos
 
-    var array = exp.col.fn(scope); // exp.col === collection (array or object)
+    var array = exp.col.fn(scope) || []; // exp.col === collection (array or object)
 
     // update DOM with [possibly] new array
 
@@ -81,19 +82,22 @@ directive('data-each', function(templateEl, exp, nodeFn){
      */
 
     function change(arr, index) {
+      if (!arr) return;
+
       index || (index = 0);
       for (var i = 0, n = arr.length; i < n; i++) {
         // XXX: should allow tracking by custom tracking function
         // (such as by `id`), but for now just by index.
-        var id = getId(arr[i], i + index);
+        var displacedIndex = i + index;
+        var id = getId(arr[i], displacedIndex);
 
         // if it's already been processed, then continue.
         if (cache[id]) continue;
 
         var attrs = {
-          index: i,
-          first: 0 === i,
-          last: (n - 1) === i
+          index: displacedIndex,
+          first: 0 === displacedIndex,
+          last: (displacedIndex + n - 1) === displacedIndex
         };
 
         attrs.middle = !(attrs.first || attrs.last);
@@ -105,7 +109,11 @@ directive('data-each', function(templateEl, exp, nodeFn){
         var childEl = templateEl.cloneNode(true);
         cache[id] = childEl;
         cursor.parentNode.insertBefore(childEl, cursor.nextSibling);
+        scopeCache[id] = childScope;
         cursor = childEl;
+        childScope.on('remove', function(){
+          console.log('childScope.on("remove")', childScope);
+        });
         nodeFn(childScope, childEl);
       }
     }
@@ -117,7 +125,9 @@ directive('data-each', function(templateEl, exp, nodeFn){
     function remove(id) {
       if (cache[id]) {
         cache[id].parentNode.removeChild(cache[id]);
+        scopeCache[id].remove();
         delete cache[id];
+        delete scopeCache[id];
       }
     }
 
@@ -174,6 +184,15 @@ directive('data-each', function(templateEl, exp, nodeFn){
     function getId(record, index) {
       return oid(record) || index;
     }
+
+    // when scope is removed, clean up all listeners.
+    scope.on('remove', function(){
+      for (var id in cache) {
+        delete cache[id];
+        delete scopeCache[id];
+      }
+      unwatch(array);
+    });
   }
 
   return exec;

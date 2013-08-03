@@ -13,7 +13,8 @@
   },
   "development": {
     "component/assert": "*",
-    "visionmedia/mocha": "*"
+    "visionmedia/mocha": "*",
+    "tower/text-directive": "*"
   },
   "scripts": [
     "index.js"
