@@ -7,7 +7,7 @@ var directive = require('tower-directive');
 var content = require('tower-content');
 var template = require('tower-template');
 var oid = require('tower-oid');
-var observable = require('observable-array');
+var observable = require('tower-observable-array');
 
 /**
  * Expose `document`.
@@ -111,9 +111,6 @@ directive('data-each', function(templateEl, exp, nodeFn){
         cursor.parentNode.insertBefore(childEl, cursor.nextSibling);
         scopeCache[id] = childScope;
         cursor = childEl;
-        childScope.on('remove', function(){
-          console.log('childScope.on("remove")', childScope);
-        });
         nodeFn(childScope, childEl);
       }
     }

@@ -9,7 +9,7 @@
     "tower/content": "*",
     "tower/template": "*",
     "tower/oid": "*",
-    "viatropos/observable-array": "*"
+    "tower/observable-array": "*"
   },
   "development": {
     "component/assert": "*",
