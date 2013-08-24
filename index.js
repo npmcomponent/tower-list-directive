@@ -68,12 +68,14 @@ directive('data-each', function(templateEl, exp, nodeFn){
 
     watch(array);
 
+    // reeval when column changes.
     // watch for changes in expression,
     // which means the array has been reset.
-    exp.watch(scope, function(){
+    exp.col.watch(scope, function(){
       unwatch(array);
-      array = exp.fn(scope);
-      observable(array)
+      array = exp.col.fn(scope);
+      cursor = el;
+      observable(array);
       resetHandler(array);
     });
 
