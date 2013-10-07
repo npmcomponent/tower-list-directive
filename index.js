@@ -24,15 +24,6 @@ exports.document = 'undefined' !== typeof document && document;
 
 directive('data-each', function(templateEl, exp, nodeFn){
   var name = exp.val;
-  var val = templateEl.getAttribute('data-each');
-  templateEl.removeAttribute('data-each');
-  var trackBy = 'index';
-  var parent = templateEl.parentNode;
-  // you have to replace nodes, not remove them, to keep order.
-  var comment = exports.document.createComment(' data-each:' + val + ' ');
-  templateEl.parentNode.replaceChild(comment, templateEl);
-  // XXX: shouldn't have to be doing this, need to figure out.
-  nodeFn = template(templateEl);
 
   /**
    * List directive.
@@ -57,8 +48,15 @@ directive('data-each', function(templateEl, exp, nodeFn){
     var array = exp.col.fn(scope) || []; // exp.col === collection (array or object)
 
     // update DOM with [possibly] new array
-
-    change(array);
+    // find index;
+    var idx = 0;
+    for (var i = 0; i < cursor.parentNode.childNodes.length; i++) {
+      if (cursor == cursor.parentNode.childNodes[i]) {
+        idx = i;
+        break;
+      }
+    }
+    change(array, idx);
 
     // XXX: if (exp.bindTo)
 
@@ -212,4 +210,4 @@ directive('data-each', function(templateEl, exp, nodeFn){
   }
 
   return exec;
-}, true).terminal().expression('data-list');
+}, true).terminal().meta().priority(10000).expression('data-list');
