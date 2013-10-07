@@ -48,15 +48,7 @@ directive('data-each', function(templateEl, exp, nodeFn){
     var array = exp.col.fn(scope) || []; // exp.col === collection (array or object)
 
     // update DOM with [possibly] new array
-    // find index;
-    var idx = 0;
-    for (var i = 0; i < cursor.parentNode.childNodes.length; i++) {
-      if (cursor == cursor.parentNode.childNodes[i]) {
-        idx = i;
-        break;
-      }
-    }
-    change(array, idx);
+    change(array);
 
     // XXX: if (exp.bindTo)
 
@@ -83,7 +75,16 @@ directive('data-each', function(templateEl, exp, nodeFn){
 
     function change(arr, index) {
       if (!arr) return;
-      index || (index = 0);
+      if (null == index) {
+        // find index;
+        index = 0;
+        for (var i = 0; i < cursor.parentNode.childNodes.length; i++) {
+          if (cursor == cursor.parentNode.childNodes[i]) {
+            index = i;
+            break;
+          }
+        } 
+      }
       
       // starting place for adding.
       cursor = cursor.parentNode.childNodes[index];
