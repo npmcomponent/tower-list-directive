@@ -125,6 +125,7 @@ directive('data-each', function(templateEl, exp, nodeFn){
 
     function remove(id) {
       if (cache[id]) {
+        cursor = cache[id].previousSibling || el;
         cache[id].parentNode.removeChild(cache[id]);
         scopeCache[id].remove();
         delete cache[id];
