@@ -4,14 +4,11 @@
   "version": "0.1.7",
   "keywords": [],
   "dependencies": {
-    "tower-directive": "0.1.2",
-    "tower-content": "0.1.2",
-    "tower-template": "0.1.2",
-    "tower-collection": "0.1.0"
+    "tower-directive": "git://github.com/npmcomponent/tower-directive.git",
+    "tower-content": "git://github.com/npmcomponent/tower-content.git",
+    "tower-template": "git://github.com/npmcomponent/tower-template.git",
+    "tower-oid": "git://github.com/npmcomponent/tower-oid.git",
+    "tower-observable-array": "git://github.com/npmcomponent/tower-observable-array.git"
   },
-  "license": "MIT",
-  "repository": {
-    "type" : "git",
-    "url" : "http://github.com/tower/list-directive.git"
-  }
+  "license": "MIT"
 }

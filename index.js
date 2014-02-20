@@ -3,11 +3,11 @@
  * Module dependencies.
  */
 
-var directive = require('tower-directive');
-var content = require('tower-content');
-var template = require('tower-template');
-var oid = require('tower-oid');
-var observable = require('tower-observable-array');
+// commented out by npm-component: var directive = require('tower-directive');
+// commented out by npm-component: var content = require('tower-content');
+// commented out by npm-component: var template = require('tower-template');
+// commented out by npm-component: var oid = require('tower-oid');
+// commented out by npm-component: var observable = require('tower-observable-array');
 
 /**
  * Expose `document`.
